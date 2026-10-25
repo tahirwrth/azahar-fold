@@ -13,7 +13,7 @@ On supported Android foldables (developed and tested on the Samsung Galaxy Z Fol
 L and R shoulder buttons can be placed on the cover screen while the game and the
 rest of the controls stay on the main inner screen.
 
-- Cover-screen touch zones for L and R, toggled from the in-game menu
+- Cover-screen touch zones for L and R, toggled from the in-game menu (button labelled "Cover screen controls")
 - The option only appears on devices that report rear-display support, and only
   while the phone is open
 
