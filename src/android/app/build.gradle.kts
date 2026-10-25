@@ -61,9 +61,8 @@ android {
     }
 
     defaultConfig {
-        // The application ID refers to Lime3DS to allow for
-        // the Play Store listing, which was originally set up for Lime3DS, to still be used.
-        applicationId = "org.azahar_emu.azahar"
+        // The application ID is changed from original Azahar
+        applicationId = "io.github.tahirwrth.azaharfold"
         minSdk = 29
         targetSdk = 37
         versionCode = autoVersion
@@ -218,6 +217,8 @@ dependencies {
     implementation("io.coil-kt:coil:2.7.0")
     implementation("org.ini4j:ini4j:0.5.4")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.2")
+    implementation("androidx.window:window:1.3.0")
+    implementation("androidx.window:window-core:1.3.0")
 }
 
 // Download Vulkan Validation Layers from the KhronosGroup GitHub.

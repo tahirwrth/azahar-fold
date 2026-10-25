@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false"/>
@@ -46,6 +47,14 @@
         <meta-data android:name="android.game_mode_config"
             android:resource="@xml/game_mode_config" />
 
+        <!-- Allow dual-screen access on One UI -->
+        <meta-data
+            android:name="com.samsung.android.multidisplay.keep_process_alive"
+            android:value="true" />
+        <meta-data
+            android:name="androidx.window.area.OPERATION_PRESENT_ON_AREA"
+            android:value="true" />
+
         <activity
             android:name="org.citra.citra_emu.ui.main.MainActivity"
             android:theme="@style/Theme.Citra.Splash.Main"
@@ -67,6 +76,9 @@
 
         <activity
             android:name="org.citra.citra_emu.activities.EmulationActivity"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboard|keyboardHidden"
+            android:resizeableActivity="false"
+            tools:replace="android:resizeableActivity"
             android:exported="true"
             android:theme="@style/Theme.Citra.Main"
             android:launchMode="singleTop">

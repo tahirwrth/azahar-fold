@@ -49,6 +49,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.preference.PreferenceManager
+import androidx.window.core.ExperimentalWindowApi
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.slider.Slider
 import java.io.File
@@ -66,6 +67,7 @@ import org.citra.citra_emu.display.PortraitScreenLayout
 import org.citra.citra_emu.display.ScreenAdjustmentUtil
 import org.citra.citra_emu.display.ScreenLayout
 import org.citra.citra_emu.display.SecondaryDisplayLayout
+import org.citra.citra_emu.features.fold.FoldSupport
 import org.citra.citra_emu.features.hotkeys.Hotkey
 import org.citra.citra_emu.features.settings.model.BooleanSetting
 import org.citra.citra_emu.features.settings.model.CitraSettings
@@ -221,6 +223,7 @@ class EmulationFragment :
     }
 
     // This is using the correct scope, lint is just acting up
+    @OptIn(ExperimentalWindowApi::class)
     @SuppressLint("UnsafeRepeatOnLifecycleDetector")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -324,6 +327,12 @@ class EmulationFragment :
                             requireContext().theme
                         )
                     }
+                    true
+                }
+
+                R.id.menu_fold_cover_screen -> {
+                    emulationActivity.foldCover.toggle()
+                    binding.drawerLayout.close()
                     true
                 }
 
@@ -509,6 +518,14 @@ class EmulationFragment :
                                 EmulationMenuSettings.drawerLockMode
                             )
                         }
+                    }
+                }
+            }
+            launch {
+                repeatOnLifecycle(Lifecycle.State.CREATED) {
+                    FoldSupport.status.collect {
+                        binding.inGameMenu.menu.findItem(R.id.menu_fold_cover_screen)?.isVisible =
+                            emulationActivity.foldCover.isAvailable
                     }
                 }
             }

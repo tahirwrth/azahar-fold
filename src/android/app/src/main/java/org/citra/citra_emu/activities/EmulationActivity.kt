@@ -39,6 +39,7 @@ import org.citra.citra_emu.databinding.ActivityEmulationBinding
 import org.citra.citra_emu.dialogs.NetPlayDialog
 import org.citra.citra_emu.display.ScreenAdjustmentUtil
 import org.citra.citra_emu.display.SecondaryDisplay
+import org.citra.citra_emu.features.fold.FoldCoverManager
 import org.citra.citra_emu.features.hotkeys.HotkeyUtility
 import org.citra.citra_emu.features.settings.model.BooleanSetting
 import org.citra.citra_emu.features.settings.model.CitraSettings
@@ -72,6 +73,7 @@ class EmulationActivity : AppCompatActivity() {
     private lateinit var screenAdjustmentUtil: ScreenAdjustmentUtil
     private lateinit var hotkeyUtility: HotkeyUtility
     lateinit var secondaryDisplayManager: SecondaryDisplay
+    val foldCover = FoldCoverManager(this)
 
     private val onShutdown = Runnable {
         if (intent.getBooleanExtra("launchedFromShortcut", false)) {
@@ -138,6 +140,9 @@ class EmulationActivity : AppCompatActivity() {
         secondaryDisplayManager = SecondaryDisplay(this)
         secondaryDisplayManager.updateDisplay()
 
+        // foldable manager
+        foldCover.attach()
+
         NativeLibrary.initMultiplayer()
 
         binding = ActivityEmulationBinding.inflate(layoutInflater)
@@ -199,6 +204,7 @@ class EmulationActivity : AppCompatActivity() {
         NativeLibrary.playTimeManagerStop()
 
         isEmulationReady = false
+        foldCover.onStop()
         isRotationBlocked = true
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED
         emulationViewModel.setEmulationStarted(false)
@@ -251,6 +257,7 @@ class EmulationActivity : AppCompatActivity() {
     }
 
     override fun onStop() {
+        foldCover.onStop()
         secondaryDisplayManager.releasePresentation()
         super.onStop()
     }
@@ -262,6 +269,7 @@ class EmulationActivity : AppCompatActivity() {
 
     public override fun onRestart() {
         super.onRestart()
+
         secondaryDisplayManager.updateDisplay()
         NativeLibrary.reloadCameraDevices()
     }
@@ -281,6 +289,7 @@ class EmulationActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        foldCover.onDestroy()
         EmulationLifecycleUtil.removeHook(onShutdown)
         NativeLibrary.playTimeManagerStop()
         isEmulationRunning = false
@@ -338,6 +347,7 @@ class EmulationActivity : AppCompatActivity() {
             isRotationBlocked = false
             applyOrientationSettings()
         }
+
         Toast.makeText(
             applicationContext,
             getString(R.string.emulation_menu_help),
@@ -642,7 +652,7 @@ class EmulationActivity : AppCompatActivity() {
             NativeLibrary.onGamePadEvent(
                 NativeLibrary.TOUCHSCREEN_DEVICE,
                 NativeLibrary.ButtonType.DPAD_DOWN,
-                NativeLibrary.ButtonState.PRESSED
+                NativeLibrary.ButtonState.RELEASED
             )
         }
         return true
