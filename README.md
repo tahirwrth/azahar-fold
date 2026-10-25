@@ -17,6 +17,9 @@ rest of the controls stay on the main inner screen.
 - The option only appears on devices that report rear-display support, and only
   while the phone is open
 
+<img width="400" alt="image" src="https://github.com/user-attachments/assets/6d9248bc-4db5-4023-9ccb-1ac440b36984" />
+
+
 Everything else behaves like upstream Azahar.
 
 ### Known limitations
